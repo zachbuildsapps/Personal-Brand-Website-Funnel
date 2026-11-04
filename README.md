@@ -46,7 +46,7 @@ These are placeholders. The site does not pretend they are connected.
 | TikTok Pixel | `siteConfig.tracking.tiktokPixelId` | empty |
 | Public site URL | `siteConfig.siteUrl` | empty |
 | Contact email | `siteConfig.contactEmail` | empty |
-| Portrait and dealership photos | `siteConfig.about` | empty |
+| Story photos | `siteConfig.about.stories` | Taco Bell, dealership lot, AMG |
 | Sales video | `siteConfig.video` | empty |
 
 The preview application and the booking confirmation screen were exercised locally. A live Typeform form, a live Calendly event, and the ad pixels were not, because those accounts are not in this repo.
@@ -67,24 +67,7 @@ If both an MP4 and an embed URL are set, the MP4 is used. Leave both empty and t
 
 ## Add your photos
 
-1. Export a portrait and a dealership photo as JPG or WebP. Aim for roughly 1600px on the long edge and under 300KB each.
-2. Save them in `public/photos/`.
-3. Point the config at them:
-
-```ts
-portrait: {
-  src: "/photos/zach.jpg",
-  alt: "Portrait of Zach",
-  label: "Portrait",
-},
-dealershipPhoto: {
-  src: "/photos/dealership.jpg",
-  alt: "Zach at Regal Auto Sales",
-  label: "At the dealership",
-},
-```
-
-Empty `src` values keep the designed placeholders. Do not drop in random stock photos.
+The three story photos live in `public/photos/` and are referenced from `siteConfig.about.stories`. Each image keeps its own `objectPosition` so the subject stays in frame. Empty `src` values fall back to the designed placeholder.
 
 ## Replace the sample stories
 
