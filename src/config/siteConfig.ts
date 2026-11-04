@@ -56,6 +56,13 @@ export const siteConfig = {
     subheadline:
       'Learn how to find, buy, and sell profitable vehicles using the same processes I use to run my own dealership.',
     operator: 'Zach · Operator, Regal Auto Sales',
+    photo: {
+      src: '/photos/zach-amg-arco.webp',
+      alt: 'Zach standing in front of a black Mercedes-AMG SUV at an ARCO gas station at night.',
+      width: 1500,
+      height: 2000,
+      objectPosition: '50% 48%',
+    },
     proof: [
       { label: 'Operator', value: 'Regal Auto Sales' },
       { label: 'Licensed dealership', value: 'California' },
