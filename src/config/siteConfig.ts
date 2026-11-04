@@ -16,6 +16,7 @@ export const siteConfig = {
   owner: 'Zach',
   dealership: 'Regal Auto Sales',
   region: 'California',
+  // Launch blocker: add a verified business email before these legal pages are treated as final.
   contactEmail: '',
   siteUrl: '',
   legalReviewed: false,
@@ -182,7 +183,7 @@ export const siteConfig = {
     index: '05',
     label: 'Results',
     title: 'Real People. Real Progress.',
-    lede: 'Stories belong here once they are real, permissioned, and specific.',
+    lede: 'Stories belong here once they are real, permissioned, and specific. None are published on this page yet.',
     video: {
       title: 'Video testimonial',
       caption: 'A customer, in their own words.',
@@ -196,58 +197,7 @@ export const siteConfig = {
       alt: 'Screenshot of a customer message',
     },
   },
-  testimonials: [
-    {
-      id: 'evaluate',
-      quote:
-        'I kept sending cars I thought were deals, and the feedback was always about the costs I had skipped. Reconditioning, fees, how long it might sit. The first time I walked a car after that, it felt less like a guess.',
-      name: 'Jordan P.',
-      initials: 'JP',
-      context: 'Learning to evaluate a first vehicle',
-      sample: true,
-      photo: '',
-    },
-    {
-      id: 'auctions',
-      quote:
-        "I used to think a dealer auction was just a cheaper Marketplace. It isn't. I still don't have a dealer license, but I can follow the process now, and I know a low hammer price can get expensive once the fees land.",
-      name: 'Chris A.',
-      initials: 'CA',
-      context: 'Getting more comfortable with auctions',
-      sample: true,
-      photo: '',
-    },
-    {
-      id: 'first-flip',
-      quote:
-        "I was about to buy a car because I liked it. Writing the numbers out made me pass. I'd rather wait for a car that fits the plan than rush the first one.",
-      name: 'Morgan L.',
-      initials: 'ML',
-      context: 'Approaching a first flip',
-      sample: true,
-      photo: '',
-    },
-    {
-      id: 'buying',
-      quote:
-        "My old strategy was sorting by the lowest price. I don't do that anymore. I keep a short list of costs I check before I get attached, and I walk away more often. That part has been useful.",
-      name: 'Andre S.',
-      initials: 'AS',
-      context: 'Improving a vehicle buying strategy',
-      sample: true,
-      photo: '',
-    },
-    {
-      id: 'starting',
-      quote:
-        "I want to build a car business, not just sell one car. Hearing it from someone who runs a store made the unglamorous parts obvious. Licensing, patience, and not pretending a single flip is a company. I feel clearer about what I'm actually starting.",
-      name: 'Taylor R.',
-      initials: 'TR',
-      context: 'Gaining confidence to start a car-flipping business',
-      sample: true,
-      photo: '',
-    },
-  ],
+  testimonials: [] as Testimonial[],
   faq: {
     index: '06',
     label: 'FAQ',
@@ -261,7 +211,7 @@ export const siteConfig = {
       {
         question: 'How much money do I need to start?',
         answer:
-          'There isn’t one number for every market. For a mentorship call, a practical floor is about $3,000 in capital you can use for the business. With less than that, the free education is usually the better start. Don’t use rent money, grocery money, or anything you can’t afford to lose.',
+          'There isn’t one published number for every market, and this site does not list program prices. The application asks how much capital you have available because vehicles, repairs, fees, and the time a car sits all require money you can afford to risk. Details about available programs are discussed with qualified applicants. Don’t use rent money, grocery money, or anything you can’t afford to lose.',
       },
       {
         question: 'Do I need a dealer license?',
@@ -291,7 +241,7 @@ export const siteConfig = {
       {
         question: 'How do I get started?',
         answer:
-          'Apply and answer a short set of questions. If it looks like a fit, you can book a call. If you’re still researching, or working with limited capital, start with the videos on Instagram and TikTok and learn the process before you buy a car or pay for mentorship.',
+          'Apply and answer a short set of questions. Submit an application to see if we’re a good fit. If you’re still researching, start with the videos on Instagram and TikTok and learn the process before you buy a car. Details about available programs are discussed with qualified applicants.',
       },
     ],
   },
@@ -306,4 +256,12 @@ export const siteConfig = {
   },
 }
 
-export type Testimonial = (typeof siteConfig.testimonials)[number]
+export type Testimonial = {
+  id: string
+  quote: string
+  name: string
+  initials: string
+  context: string
+  sample: boolean
+  photo: string
+}

@@ -31,11 +31,22 @@ export function LegalLayout({
               </p>
             </div>
           )}
-          <h1 className="mt-8 text-[clamp(2.4rem,5vw,4rem)] font-medium tracking-[-0.045em] text-paper">{title}</h1>
-          <p className="mt-4 text-sm text-mute">Last updated October 19, 2026. Draft.</p>
-          <div className="legal mt-10 space-y-8">{children}</div>
+          <h1 className="mt-8 text-[clamp(2.4rem,5vw,4rem)] font-medium tracking-[-0.045em] text-gold">{title}</h1>
+          <p className="mt-4 text-sm text-mute">Last updated November 3, 2026. Draft pending legal review.</p>
+          <div className="legal mt-10 space-y-8 text-base leading-relaxed">{children}</div>
         </article>
       </Shell>
     </main>
+  )
+}
+
+export function NeedsConfirmation({ children }: { children: ReactNode }) {
+  return (
+    <aside className="mt-4 border border-gold/40 px-4 py-3">
+      <p className="text-sm leading-relaxed text-paper">
+        <span className="font-medium text-gold">Needs confirmation before launch. </span>
+        {children}
+      </p>
+    </aside>
   )
 }

@@ -70,16 +70,16 @@ export function Footer() {
               Privacy Policy
             </Link>
             <Link to="/terms" className="py-1 text-mute hover:text-paper">
-              Terms of Service
+              Terms and Conditions
             </Link>
             <Link to="/disclaimer" className="py-1 text-mute hover:text-paper">
-              Disclaimer
+              Earnings Disclaimer
             </Link>
           </nav>
         </div>
         <p className="mt-12 border-t border-white/10 pt-6 text-xs leading-relaxed text-mute">
-          © {year} {siteConfig.name}. Educational content. Car flipping involves financial risk, and results are not
-          guaranteed.
+          © {year} {siteConfig.name}. Educational content only. Results vary. No earnings are guaranteed. Auction
+          access is subject to eligibility, applicable laws, and auction policies.
         </p>
       </Shell>
     </footer>

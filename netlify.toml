@@ -5,6 +5,9 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Client-rendered Vite app. Direct visits to /, /privacy, /terms, and /disclaimer
+# need this fallback. Remove it only if the site becomes server-rendered.
+# Do not attach zachflipswhips.com in this file.
 [[redirects]]
   from = "/*"
   to = "/index.html"

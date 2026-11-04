@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { siteConfig } from '../config/siteConfig.ts'
+import { buildApplicationConsent, type ApplicationConsent } from '../lib/applicationConsent.ts'
 import {
   capitalOptions,
   emptyAnswers,
@@ -69,6 +71,8 @@ export function ApplicationPreview({ source }: { source: string }) {
   const [index, setIndex] = useState(0)
   const [error, setError] = useState('')
   const [booked, setBooked] = useState(false)
+  const [marketingSmsConsent, setMarketingSmsConsent] = useState(false)
+  const [consent, setConsent] = useState<ApplicationConsent | null>(null)
   const started = useRef(false)
   const reported = useRef(false)
   const question = questions[index]
@@ -99,6 +103,9 @@ export function ApplicationPreview({ source }: { source: string }) {
       started.current = true
       track('application_started', { source, mode: 'preview' })
     }
+    if (index === questions.length - 1) {
+      setConsent(buildApplicationConsent(marketingSmsConsent))
+    }
     setIndex((current) => current + 1)
     setError('')
   }
@@ -109,6 +116,7 @@ export function ApplicationPreview({ source }: { source: string }) {
         answers={answers}
         qualified={qualified}
         booked={booked}
+        consent={consent}
         onBooked={() => {
           setBooked(true)
           track('call_booked', { source, mode: 'preview' })
@@ -126,7 +134,7 @@ export function ApplicationPreview({ source }: { source: string }) {
       <div className="h-px bg-white/10">
         <div className="h-px bg-gold" style={{ width: `${progress}%` }} />
       </div>
-      <div className="flex min-h-0 flex-1 flex-col px-5 py-6 sm:px-8">
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-6 sm:px-8">
         <p className="font-mono text-[11px] tracking-[0.16em] text-mute uppercase">
           {String(index + 1).padStart(2, '0')} / {String(questions.length).padStart(2, '0')}
         </p>
@@ -188,24 +196,62 @@ export function ApplicationPreview({ source }: { source: string }) {
               {error}
             </p>
           ) : null}
-        </div>
-        <div className="flex items-center gap-3 pt-8">
-          {index > 0 ? (
-            <button
-              type="button"
-              className={`${buttonBase} ${buttonSecondary} ${buttonMd}`}
-              onClick={() => {
-                setIndex((current) => current - 1)
-                setError('')
-              }}
-            >
-              Back
-            </button>
+          {index === questions.length - 1 ? (
+            <div className="mt-6 max-w-xl space-y-4 border-t border-white/10 pt-6">
+              <p className="text-sm leading-relaxed text-paper">
+                By submitting this application, you acknowledge that your information will be used to review your
+                inquiry and contact you about your application, as described in our{' '}
+                <Link
+                  to="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold underline underline-offset-4"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </p>
+              <p className="text-sm leading-relaxed text-mute">
+                This preview does not send your application. Answers stay in this window until a form service is
+                connected.
+              </p>
+              <label className="flex items-start gap-3 text-sm leading-relaxed text-mute">
+                <input
+                  type="checkbox"
+                  checked={marketingSmsConsent}
+                  onChange={(event) => setMarketingSmsConsent(event.target.checked)}
+                  className="mt-1 h-4 w-4 shrink-0 accent-[#d4af37]"
+                />
+                <span>
+                  I agree to receive optional marketing text messages from ZachFlipsWhips about programs and services.
+                  Message frequency varies. Message and data rates may apply. Reply STOP to opt out and HELP for help.
+                  Consent is not required to apply or purchase.
+                </span>
+              </label>
+              <p className="text-sm leading-relaxed text-mute">
+                This choice is optional and is separate from the privacy acknowledgment. Text messaging is not active
+                on this website, and checking the box does not send a message.
+              </p>
+            </div>
           ) : null}
-          <button type="button" className={`${buttonBase} ${buttonPrimary} ${buttonMd}`} onClick={goNext}>
-            {index === questions.length - 1 ? 'See next step' : 'Continue'}
-          </button>
         </div>
+      </div>
+      <div className="flex shrink-0 items-center gap-3 border-t border-white/10 px-5 py-4 sm:px-8">
+        {index > 0 ? (
+          <button
+            type="button"
+            className={`${buttonBase} ${buttonSecondary} ${buttonMd}`}
+            onClick={() => {
+              setIndex((current) => current - 1)
+              setError('')
+            }}
+          >
+            Back
+          </button>
+        ) : null}
+        <button type="button" className={`${buttonBase} ${buttonPrimary} ${buttonMd}`} onClick={goNext}>
+          {index === questions.length - 1 ? 'See next step' : 'Continue'}
+        </button>
       </div>
     </div>
   )
@@ -215,12 +261,14 @@ function Result({
   answers,
   qualified,
   booked,
+  consent,
   onBooked,
   onBack,
 }: {
   answers: ApplicationAnswers
   qualified: boolean
   booked: boolean
+  consent: ApplicationConsent | null
   onBooked: () => void
   onBack: () => void
 }) {
@@ -235,7 +283,10 @@ function Result({
           Watch for a confirmation from the scheduler. Come ready to talk about your goals and the capital you have
           to work with. This call is a conversation about fit. It is not a guarantee of results.
         </p>
-        <p className="mt-4 text-sm text-mute">Preview note: this confirmation appeared because a Calendly booking event was received. Nothing else was emailed by this website.</p>
+        <p className="mt-4 text-sm text-mute">
+          Preview note: this confirmation appeared because a Calendly booking event was received. Nothing else was
+          emailed by this website. <PreviewNotLive consent={consent} />
+        </p>
       </div>
     )
   }
@@ -254,6 +305,9 @@ function Result({
         <p className="font-mono text-[11px] tracking-[0.16em] text-gold uppercase">A better next step</p>
         <h2 className="mt-3 text-3xl font-medium tracking-[-0.04em] text-paper">Start with the education.</h2>
         <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-mute">{copy}</p>
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-mute">
+          <PreviewNotLive consent={consent} />
+        </p>
         <div className="mt-6 flex gap-5 text-sm">
           <a href={siteConfig.social.instagram} target="_blank" rel="noreferrer noopener" className="text-paper underline underline-offset-4">
             Instagram
@@ -277,6 +331,9 @@ function Result({
         Your answers look like a fit for a conversation. The next step is to pick a time. We’ll talk about your goals
         and whether mentorship or auction education makes sense. A call is not acceptance into a program, and it isn’t
         a promise that you’ll make money.
+      </p>
+      <p className="mt-4 max-w-xl text-sm leading-relaxed text-mute">
+        <PreviewNotLive consent={consent} />
       </p>
       <div className="mt-6">
         {toLiveCalendly(siteConfig.calendlyUrl) ? (
@@ -302,6 +359,18 @@ function Result({
         Edit answers
       </button>
     </div>
+  )
+}
+
+function PreviewNotLive({ consent }: { consent: ApplicationConsent | null }) {
+  const textChoice = consent?.marketingSmsConsent
+    ? 'The optional marketing-text box was checked in this preview only.'
+    : 'The optional marketing-text box was left unchecked.'
+  return (
+    <>
+      Applications are not live yet. Nothing you entered was transmitted or saved. No text message will be sent.{' '}
+      {textChoice}
+    </>
   )
 }
 

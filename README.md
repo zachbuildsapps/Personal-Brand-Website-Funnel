@@ -24,7 +24,7 @@ npm run preview   # serve the production build
 
 ## What is already working
 
-- Single-page home: navigation, hero, video placeholder, two offers, about, process, sample stories, FAQ, closing call to action, footer.
+- Single-page home: navigation, hero, video placeholder, two offers, about, process, an empty results section, FAQ, closing call to action, footer.
 - Sticky navigation, smooth in-page links, and a full-screen mobile menu.
 - Sticky Apply bar on phones after the hero.
 - Application window. Until a Typeform URL is saved, this is a **preview**. Answers stay in the browser and are not submitted. The preview still applies the qualification rules below.
@@ -69,11 +69,9 @@ If both an MP4 and an embed URL are set, the MP4 is used. Leave both empty and t
 
 The three story photos live in `public/photos/` and are referenced from `siteConfig.about.stories`. Each image keeps its own `objectPosition` so the subject stays in frame. Empty `src` values fall back to the designed placeholder.
 
-## Replace the sample stories
+## Add a real story
 
-The Results section is labeled **Sample content**. Those five stories are fictional layout placeholders. They are not customers and they are not results.
-
-Before launch, either delete `testimonials` down to an empty array, or replace each item with a real story you have permission to publish and set `sample: false`. Add a photo only when you have permission:
+The Results section does not publish testimonials. `testimonials` is an empty array. Items with `sample: true` are not rendered. Add a story only when you have permission to publish that person’s words, and set `sample: false`.
 
 ```ts
 {
@@ -87,8 +85,6 @@ Before launch, either delete `testimonials` down to an empty array, or replace e
 }
 ```
 
-While any item still has `sample: true`, the warning stays on the page.
-
 Video testimonial and message screenshot:
 
 ```ts
@@ -98,7 +94,7 @@ results: {
 }
 ```
 
-Empty slots are hidden once every testimonial has `sample: false`.
+Empty media slots stay hidden until a real file path is set. Do not invent reviews, earnings, or sales figures.
 
 ## Connect Typeform
 
@@ -186,23 +182,25 @@ Set `siteConfig.siteUrl` to the real domain, including `https`, when you have on
 
 After a lawyer reviews them, update the copy and set `legalReviewed` to `true`. Do not flip that flag only to hide the banner.
 
-Add `contactEmail` when you have an address you want on the legal pages and in the footer.
+`contactEmail` is empty. That is a launch blocker for the privacy policy and the terms. Add a verified business email. Do not invent one.
+
+The application preview shows a privacy acknowledgment and a separate, unchecked marketing-text choice. Texting is not active. GoHighLevel is not connected. The preview must not say an application was submitted.
 
 ## Deploy to Netlify
 
-Do not deploy until you want the site public.
+Do not attach `zachflipswhips.com` until that change is explicitly approved. The domain already serves a different live site.
 
 The repo already includes `netlify.toml` and `public/_redirects`.
 
-1. Push this branch and merge it when you are ready.
-2. In Netlify, add a new site from this GitHub repo.
+1. Push this branch. Do not merge it as a production cutover.
+2. In Netlify, add a new site from this GitHub repo, or use a preview deploy. Do not reuse the existing production site that serves the domain.
 3. Build command: `npm run build`
 4. Publish directory: `dist`
 5. Node version: 22 (already set in `netlify.toml`)
 6. No environment variables are required. URLs are edited in `siteConfig.ts`, then the site is rebuilt.
-7. After the first deploy, set `siteConfig.siteUrl` to the Netlify or custom domain and redeploy so canonical links are correct.
+7. Leave the custom domain unassigned. After a staging URL exists, set `siteConfig.siteUrl` only if you want canonical links to point at that staging URL.
 
-Netlify will serve the app as a single page and send `/privacy`, `/terms`, and `/disclaimer` to `index.html`.
+Netlify serves this Vite app as a single page. The `/*` → `/index.html` 200 redirect is what makes `/privacy`, `/terms`, and `/disclaimer` load on a direct visit. It is not a server-rendered route.
 
 ## Checks already run
 
